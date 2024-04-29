@@ -1,0 +1,121 @@
+#include <stdio.h>
+
+// Função para exibir o estado atual da Torre de Hanói
+void exibirTorre(int torre1[], int torre2[], int torre3[], int numDiscos) {
+    printf("\nEstado atual da Torre de Hanoi:\n\n");
+
+    printf("Pino A: ");
+    for (int i = numDiscos - 1; i >= 0; i--) {
+        if (torre1[i] == 0)
+            printf("| ");
+        else
+            printf("%d ", torre1[i]);
+    }
+    printf("\n");
+
+    printf("Pino B: ");
+    for (int i = numDiscos - 1; i >= 0; i--) {
+        if (torre2[i] == 0)
+            printf("| ");
+        else
+            printf("%d ", torre2[i]);
+    }
+    printf("\n");
+
+    printf("Pino C: ");
+    for (int i = numDiscos - 1; i >= 0; i--) {
+        if (torre3[i] == 0)
+            printf("| ");
+        else
+            printf("%d ", torre3[i]);
+    }
+    printf("\n");
+}
+
+// Função para mover um disco entre os pinos
+void moverDisco(int origem[], int destino[], int *topoOrigem, int *topoDestino) {
+    if (*topoOrigem >= 0) {
+        int disco = origem[*topoOrigem];
+        origem[*topoOrigem] = 0;
+        (*topoOrigem)--;
+
+        (*topoDestino)++;
+        destino[*topoDestino] = disco;
+    } else {
+        printf("\nMovimento inválido. Tente novamente.\n");
+    }
+}
+
+int main() {
+    int numDiscos = 3;
+    int torre1[3] = {3, 2, 1}; // Pino A
+    int torre2[3] = {0};       // Pino B
+    int torre3[3] = {0};       // Pino C
+
+    int topoTorre1 = numDiscos - 1;
+    int topoTorre2 = -1;
+    int topoTorre3 = -1;
+
+    printf("Bem-vindo ao jogo da Torre de Hanoi!\n");
+    printf("O objetivo é mover todos os discos do Pino A para o Pino C, usando o Pino B como auxiliar.\n");
+
+    char origem, destino;
+    while (topoTorre3 < numDiscos - 1) {
+        exibirTorre(torre1, torre2, torre3, numDiscos);
+
+        printf("\nDigite o pino de origem (A, B, C): ");
+        scanf(" %c", &origem);
+
+        printf("Digite o pino de destino (A, B, C): ");
+        scanf(" %c", &destino);
+
+        switch (origem) {
+            case 'A':
+                switch (destino) {
+                    case 'A':
+                        printf("\nMovimento inválido. Tente novamente.\n");
+                        break;
+                    case 'B':
+                        moverDisco(torre1, torre2, &topoTorre1, &topoTorre2);
+                        break;
+                    case 'C':
+                        moverDisco(torre1, torre3, &topoTorre1, &topoTorre3);
+                        break;
+                }
+                break;
+            case 'B':
+                switch (destino) {
+                    case 'A':
+                        moverDisco(torre2, torre1, &topoTorre2, &topoTorre1);
+                        break;
+                    case 'B':
+                        printf("\nMovimento inválido. Tente novamente.\n");
+                        break;
+                    case 'C':
+                        moverDisco(torre2, torre3, &topoTorre2, &topoTorre3);
+                        break;
+                }
+                break;
+            case 'C':
+                switch (destino) {
+                    case 'A':
+                        moverDisco(torre3, torre1, &topoTorre3, &topoTorre1);
+                        break;
+                    case 'B':
+                        moverDisco(torre3, torre2, &topoTorre3, &topoTorre2);
+                        break;
+                    case 'C':
+                        printf("\nMovimento inválido. Tente novamente.\n");
+                        break;
+                }
+                break;
+            default:
+                printf("\nPino inválido. Tente novamente.\n");
+                break;
+        }
+    }
+
+    printf("\nParabéns! Você resolveu o quebra-cabeça da Torre de Hanoi!\n");
+
+    return 0;
+}
